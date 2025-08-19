@@ -23,6 +23,13 @@ export const GAME_BY_ID = gql`
             maxPlayers
             playtime
             rulesSummary
+            setup {
+                playerCount
+                components {
+                    name
+                    quantity
+                }
+            }
         }
     }
 `;

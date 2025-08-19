@@ -1,3 +1,4 @@
+import Card from '@/components/Card';
 import Tabs from '@/components/Tabs';
 import { client } from '@/graphql/client';
 import { GAME_BY_ID } from '@/graphql/queries';
@@ -21,38 +22,60 @@ export default async function GameDetails(props: {
             id: 'overview',
             label: 'Overview',
             content: (
-                <div className="space-y-4">
-                    <section className="rounded-2xl border bg-white p-4 shadow-sm">
-                        <h2 className="text-lg font-medium mb-2">Objective</h2>
-                        <p className="text-gray-700">{g.goal}</p>
-                    </section>
-                    <section className="rounded-2xl border bg-white p-4 shadow-sm">
-                        <h2 className="text-lg font-medium mb-2">Rules Summary</h2>
-                        <p className="text-gray-700">{g.rulesSummary}</p>
-                    </section>
-                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
+                    <div className="space-y-4">
+                        <h1>Overview</h1>
+                        <Card title="Goal">
+                            <p>{g.goal}</p>
+                        </Card>
+                        <Card title='Rules Summay'>
+                            <p>{g.rulesSummary}</p>
+                        </Card>
+                        {/* <section className="rounded-2xl border bg-white p-4 shadow-sm">
+                            <h2 className="text-lg font-medium mb-2">Goal</h2>
+                            <p className="text-gray-700">{g.goal}</p>
+                        </section>
+                        <section className="rounded-2xl border bg-white p-4 shadow-sm">
+                            <h2 className="text-lg font-medium mb-2">Rules Summary</h2>
+                            <p className="text-gray-700">{g.rulesSummary}</p>
+                        </section> */}
+                    </div>
+                    <div className="space-y-4">
+                        <section className="rounded-2xl border bg-white p-4 shadow-sm">
+                            <h2 className="text-lg font-medium mb-2">Goal</h2>
+                            <p className="text-gray-700">{g.goal}</p>
+                        </section>
+                        <section className="rounded-2xl border bg-white p-4 shadow-sm">
+                            <h2 className="text-lg font-medium mb-2">Rules Summary</h2>
+                            <p className="text-gray-700">{g.rulesSummary}</p>
+                        </section>
+                    </div>
+                </div>          
             ),
         },
         {
             id: 'setup',
             label: 'Setup',
             content: (
-                <div className="grid gap-4">
-                    {(g.setup ?? []).map((s: any, idx: number) => (
-                        <div key={idx} className="rounded-2xl border bg-white p-4 shadow-sm">
-                            <h3 className="font-medium mb-2">
-                                {s.playerCount} player{s.playerCount > 1 ? 's' : ''}
-                            </h3>
-                            <ul className="list-disc pl-5 text-gray-700">
-                                {s.components.map((c: any, i: number) => (
-                                    <li key={i}>
-                                        {c.quantity} × {c.name}
-                                    </li>
+                <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
+                    <div className="space-y-4">
+                        <Card title="Setup">
+                            <div className="space-y-4">
+                                {(g.setup ?? []).map((s: any, i: number) => (
+                                    <div key={i}>
+                                        <h3 className="font-medium mb-1">{s.playerCount} players</h3>
+                                        <ul className="list-disc list-inside text-sm text-gray-700">
+                                            {s.components.map((c: any, j: number) => (
+                                                <li key={j}>{c.quantity} × {c.name}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
                                 ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
+                            </div>
+                        </Card>
+
+                    </div>
+                </div>   
             ),
         },
         {
