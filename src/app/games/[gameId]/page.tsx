@@ -31,14 +31,6 @@ export default async function GameDetails(props: {
                         <Card title='Rules Summay'>
                             <p>{g.rulesSummary}</p>
                         </Card>
-                        {/* <section className="rounded-2xl border bg-white p-4 shadow-sm">
-                            <h2 className="text-lg font-medium mb-2">Goal</h2>
-                            <p className="text-gray-700">{g.goal}</p>
-                        </section>
-                        <section className="rounded-2xl border bg-white p-4 shadow-sm">
-                            <h2 className="text-lg font-medium mb-2">Rules Summary</h2>
-                            <p className="text-gray-700">{g.rulesSummary}</p>
-                        </section> */}
                     </div>
                     <div className="space-y-4">
                         <section className="rounded-2xl border bg-white p-4 shadow-sm">
@@ -58,23 +50,42 @@ export default async function GameDetails(props: {
             label: 'Setup',
             content: (
                 <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
-                    <div className="space-y-4">
                         <Card title="Setup">
                             <div className="space-y-4">
                                 {(g.setup ?? []).map((s: any, i: number) => (
                                     <div key={i}>
                                         <h3 className="font-medium mb-1">{s.playerCount} players</h3>
-                                        <ul className="list-disc list-inside text-sm text-gray-700">
-                                            {s.components.map((c: any, j: number) => (
-                                                <li key={j}>{c.quantity} × {c.name}</li>
-                                            ))}
-                                        </ul>
+                                        <table className='border-separate border border-gray-400'>
+                                            <thead className=''>
+                                                <tr>
+                                                    <th className='border border-gray-300 p-4'>
+                                                        Component
+                                                    </th>
+                                                    <th className='border border-gray-300 p-4'>
+                                                        Quantity
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {s.components.map((c: any, j: number) => (
+                                                    <tr>
+                                                        <td key={j} className='border border-gray-300 p-4 text-gray-500 dark:border-gray-400'>{c.quantity}</td>
+                                                        <td className='border border-gray-300 p-4 text-gray-500 dark:border-gray-400'>{c.name}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+
+                                        </table>
                                     </div>
                                 ))}
                             </div>
                         </Card>
+                        <Card title='Setup Instructions'>
+                            <div className="space-y-4">
+                                <p>hey</p>
+                            </div>
 
-                    </div>
+                        </Card>
                 </div>   
             ),
         },
