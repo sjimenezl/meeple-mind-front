@@ -9,6 +9,7 @@ export default async function GameDetails(props: {
 }) {
     const { gameId } = await props.params;
     const res = await client.query(GAME_BY_ID, { id: gameId }).toPromise();
+    console.log(res)
 
     if (res.error) {
         return <div className="max-w-3xl mx-auto p-6">Error: {res.error.message}</div>;
@@ -50,42 +51,47 @@ export default async function GameDetails(props: {
             label: 'Setup',
             content: (
                 <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
-                        <Card title="Setup">
-                            <div className="space-y-4">
-                                {(g.setup ?? []).map((s: any, i: number) => (
-                                    <div key={i}>
-                                        <h3 className="font-medium mb-1">{s.playerCount} players</h3>
-                                        <table className='border-separate border border-gray-400'>
-                                            <thead className=''>
+                    <div className='space-y-4'>
+                        <Card title='Setup'>
+                            {(g.setup ?? []).map((s: any, i: number) => (
+                                <div key={i}>
+                                    <h3 className="font-medium mb-1">{s.playerCount} players</h3>
+                                    <table className='border-separate border border-gray-400'>
+                                        <thead className=''>
+                                            <tr>
+                                                <th className='border border-gray-300 p-4'>
+                                                    Component
+                                                </th>
+                                                <th className='border border-gray-300 p-4'>
+                                                    Quantity
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {s.components.map((c: any, j: number) => (
                                                 <tr>
-                                                    <th className='border border-gray-300 p-4'>
-                                                        Component
-                                                    </th>
-                                                    <th className='border border-gray-300 p-4'>
-                                                        Quantity
-                                                    </th>
+                                                    <td key={j} className='border border-gray-300 p-4 text-gray-500 dark:border-gray-400'>{c.quantity}</td>
+                                                    <td className='border border-gray-300 p-4 text-gray-500 dark:border-gray-400'>{c.name}</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                {s.components.map((c: any, j: number) => (
-                                                    <tr>
-                                                        <td key={j} className='border border-gray-300 p-4 text-gray-500 dark:border-gray-400'>{c.quantity}</td>
-                                                        <td className='border border-gray-300 p-4 text-gray-500 dark:border-gray-400'>{c.name}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
+                                            ))}
+                                        </tbody>
 
-                                        </table>
-                                    </div>
-                                ))}
-                            </div>
+                                    </table>
+                                </div>
+                            ))}
+
                         </Card>
+                    </div>
+                    <div className='space-y-4'>
                         <Card title='Setup Instructions'>
-                            <div className="space-y-4">
-                                <p>hey</p>
-                            </div>
+                            <ol className="rounded-2xl bg-white p-4 list-decimal pl-6 text-gray-700">
+                                {(g.setupInstructions ?? []).map((si: any, i: number) => (
+                                    <li key={i} className="">{si.description} {i}</li>
+                                ))}
+                            </ol>
 
                         </Card>
+                    </div>
                 </div>   
             ),
         },

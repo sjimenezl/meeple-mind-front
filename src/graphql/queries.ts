@@ -30,6 +30,10 @@ export const GAME_BY_ID = gql`
                     quantity
                 }
             }
+            setupInstructions {
+                description
+                setupNumber
+            }
         }
     }
 `;
