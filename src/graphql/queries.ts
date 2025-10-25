@@ -34,6 +34,21 @@ export const GAME_BY_ID = gql`
                 description
                 setupNumber
             }
+            turnStructure {
+                steps
+            }
+            scoringRules {
+                description
+                points
+                dynamic
+            }
+            winCondition
+            drawCondition
+            endCondition
+            variants {
+                title
+                description
+            }
         }
     }
 `;

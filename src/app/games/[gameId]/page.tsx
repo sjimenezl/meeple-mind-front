@@ -1,4 +1,5 @@
 import Card from '@/components/Card';
+import SidebarMeta from '@/components/SideBarMeta';
 import Tabs from '@/components/Tabs';
 import { client } from '@/graphql/client';
 import { GAME_BY_ID } from '@/graphql/queries';
@@ -52,7 +53,21 @@ export default async function GameDetails(props: {
             content: (
                 <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
                     <div className='space-y-4'>
-                        <Card title='Setup'>
+                        <Card title="Setup">
+                            <div className="space-y-4">
+                                {(g.setup ?? []).map((s: any, i: number) => (
+                                    <div key={i}>
+                                        <h3 className="font-medium mb-1">{s.playerCount} players</h3>
+                                        <ul className="list-disc list-inside text-sm text-gray-700">
+                                            {s.components.map((c: any, j: number) => (
+                                                <li key={j}>{c.quantity} × {c.name}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </div>
+                        </Card>
+                        {/* <Card title='Setup'>
                             {(g.setup ?? []).map((s: any, i: number) => (
                                 <div key={i}>
                                     <h3 className="font-medium mb-1">{s.playerCount} players</h3>
@@ -80,7 +95,7 @@ export default async function GameDetails(props: {
                                 </div>
                             ))}
 
-                        </Card>
+                        </Card> */}
                     </div>
                     <div className='space-y-4'>
                         <Card title='Setup Instructions'>
@@ -99,27 +114,54 @@ export default async function GameDetails(props: {
             id: 'turn-structure',
             label: 'Turn Structure',
             content: (
-                <ol className="rounded-2xl border bg-white p-4 shadow-sm list-decimal pl-6 text-gray-700">
-                    {(g.turnStructure ?? []).flatMap((ts: any) => ts.steps).map((step: string, i: number) => (
-                        <li key={i} className="mb-1">{step}</li>
-                    ))}
-                </ol>
+                <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
+                    <div className="space-y-4">
+                        <Card title="Turn Structure">
+                            <ol className="list-decimal pl-6 space-y-1">
+                                {(g.turnStructure ?? []).flatMap((ts: any) => ts.steps).map((step: string, i: number) => (
+                                    <li key={i}>{step}</li>
+                                ))}
+                            </ol>
+                        </Card>
+                    </div>
+                </div>  
             ),
         },
         {
             id: 'scoring',
             label: 'Scoring',
             content: (
-                <div className="rounded-2xl border bg-white p-4 shadow-sm">
-                    <ul className="list-disc pl-5 text-gray-700">
-                        {(g.scoringRules ?? []).map((r: any, i: number) => (
-                            <li key={i}>
-                                <span className="font-medium">{r.description}</span>
-                                {r.points != null && <> — <span className="text-amber-700">{r.points} pts</span></>}
-                                {r.dynamic && <div className="text-sm text-gray-600">{r.dynamic}</div>}
-                            </li>
-                        ))}
-                    </ul>
+                <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
+                    <div className="space-y-4">
+                        <Card title="Scoring">
+                            <ul className="space-y-2">
+                                {(g.scoringRules ?? []).map((r: any, i: number) => (
+                                    <li key={i}>
+                                        <span className="font-medium">{r.description}</span>
+                                        {r.points != null && <> — <span className="text-amber-700">{r.points} pts</span></>}
+                                        {r.dynamic && <div className="text-sm text-gray-600">{r.dynamic}</div>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </Card>
+                    </div>
+                    <div className="space-y-4">
+                        <Card title="Win condition">
+                            <ul className="space-y-2">
+                                {g.winCondition}
+                            </ul>
+                        </Card>
+                        <Card title="Draw condition">
+                            <ul className="space-y-2">
+                                {g.drawCondition}
+                            </ul>
+                        </Card>
+                        <Card title="End condition">
+                            <ul className="space-y-2">
+                                {g.endCondition}
+                            </ul>
+                        </Card>
+                    </div>
                 </div>
             ),
         },
@@ -161,14 +203,6 @@ export default async function GameDetails(props: {
                         {g.playtime} mins
                     </span>
                 </div>
-                {/* <div className="flex gap-2">
-                    <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700">
-                        {g.minPlayers}–{g.maxPlayers} Players
-                    </span>
-                    <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700">
-                        {g.playtime} mins
-                    </span>
-                </div> */}
             </header>
 
             {/* Tabs */}
@@ -176,3 +210,4 @@ export default async function GameDetails(props: {
         </main>
     );
 }
+
