@@ -1,5 +1,5 @@
 import Card from '@/components/Card';
-import SidebarMeta from '@/components/SideBarMeta';
+import SideBarMeta from '@/components/SideBarMeta';
 import Tabs from '@/components/Tabs';
 import { client } from '@/graphql/client';
 import { GAME_BY_ID } from '@/graphql/queries';
@@ -26,23 +26,15 @@ export default async function GameDetails(props: {
             content: (
                 <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
                     <div className="space-y-4">
-                        <h1>Overview</h1>
                         <Card title="Goal">
                             <p>{g.goal}</p>
                         </Card>
-                        <Card title='Rules Summay'>
+                        <Card title='Rules Summary'>
                             <p>{g.rulesSummary}</p>
                         </Card>
                     </div>
                     <div className="space-y-4">
-                        <section className="rounded-2xl border bg-white p-4 shadow-sm">
-                            <h2 className="text-lg font-medium mb-2">Goal</h2>
-                            <p className="text-gray-700">{g.goal}</p>
-                        </section>
-                        <section className="rounded-2xl border bg-white p-4 shadow-sm">
-                            <h2 className="text-lg font-medium mb-2">Rules Summary</h2>
-                            <p className="text-gray-700">{g.rulesSummary}</p>
-                        </section>
+                        <SideBarMeta g={g} />
                     </div>
                 </div>          
             ),
@@ -53,7 +45,7 @@ export default async function GameDetails(props: {
             content: (
                 <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
                     <div className='space-y-4'>
-                        <Card title="Setup">
+                        <Card title="Players setup">
                             <div className="space-y-4">
                                 {(g.setup ?? []).map((s: any, i: number) => (
                                     <div key={i}>
@@ -67,44 +59,14 @@ export default async function GameDetails(props: {
                                 ))}
                             </div>
                         </Card>
-                        {/* <Card title='Setup'>
-                            {(g.setup ?? []).map((s: any, i: number) => (
-                                <div key={i}>
-                                    <h3 className="font-medium mb-1">{s.playerCount} players</h3>
-                                    <table className='border-separate border border-gray-400'>
-                                        <thead className=''>
-                                            <tr>
-                                                <th className='border border-gray-300 p-4'>
-                                                    Component
-                                                </th>
-                                                <th className='border border-gray-300 p-4'>
-                                                    Quantity
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {s.components.map((c: any, j: number) => (
-                                                <tr>
-                                                    <td key={j} className='border border-gray-300 p-4 text-gray-500 dark:border-gray-400'>{c.quantity}</td>
-                                                    <td className='border border-gray-300 p-4 text-gray-500 dark:border-gray-400'>{c.name}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-
-                                    </table>
-                                </div>
-                            ))}
-
-                        </Card> */}
                     </div>
                     <div className='space-y-4'>
                         <Card title='Setup Instructions'>
-                            <ol className="rounded-2xl bg-white p-4 list-decimal pl-6 text-gray-700">
+                            <ol className="rounded-2xl list-decimal pl-6 text-gray-700">
                                 {(g.setupInstructions ?? []).map((si: any, i: number) => (
                                     <li key={i} className="">{si.description} {i}</li>
                                 ))}
                             </ol>
-
                         </Card>
                     </div>
                 </div>   
@@ -183,8 +145,8 @@ export default async function GameDetails(props: {
 
     return (
         <main className="max-w-5xl mx-auto p-6 space-y-6">
-            {/* Breadcrumbs súper simple */}
-            <nav className="text-sm text-gray-500">
+            {/* Breadcrumbs */}
+            <nav aria-label="Breadcrumb" className="text-sm text-gray-500">
                 <a href="/" className="hover:underline">Home</a>
                 <span> · </span>
                 <a href="/games" className="hover:underline">Games</a>
@@ -192,7 +154,7 @@ export default async function GameDetails(props: {
                 <span className="text-gray-700">{g.title}</span>
             </nav>
 
-            {/* Header del juego */}
+            {/* Header */}
             <header className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-semibold">{g.title}</h1>
