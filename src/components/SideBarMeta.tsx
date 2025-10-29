@@ -1,6 +1,6 @@
 // components/SidebarMeta.tsx
 'use client';
-export default function SidebarMeta({ g }: { g: any }) {
+export default function SideBarMeta({ g }: { g: any }) {
     return (
         <aside className="rounded-2xl border bg-white p-4 shadow-sm space-y-2">
             <div className="text-sm text-gray-600">Players</div>

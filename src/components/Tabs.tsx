@@ -11,21 +11,20 @@ type TabDef = {
 export default function Tabs({
     tabs,
     initialId,
-    syncWithHash = true, // true, use #overview/#setup at the url
+    syncWithHash = true,
 }: {
     tabs: TabDef[];
     initialId?: string;
     syncWithHash?: boolean;
 }) {
-    const initial =
-        (typeof window !== 'undefined' && window.location.hash?.replace('#', '')) ||
-        initialId ||
-        tabs[0]?.id;
-
-    const [active, setActive] = useState<string>(initial);
+    const [active, setActive] = useState<string>(initialId || tabs[0]?.id);
 
     useEffect(() => {
         if (!syncWithHash) return;
+        const fromHash = window.location.hash.replace('#', '');
+        if (fromHash && tabs.some(t => t.id === fromHash)) {
+            setActive(fromHash);
+        }
         const onHash = () => {
             const h = window.location.hash.replace('#', '');
             if (tabs.some(t => t.id === h)) setActive(h);
@@ -41,12 +40,7 @@ export default function Tabs({
 
     return (
         <div className="w-full">
-            {/* Tablist */}
-            <div
-                role="tablist"
-                aria-label="Game sections"
-                className="flex gap-6 border-b"
-            >
+            <div role="tablist" aria-label="Game sections" className="flex gap-6 border-b">
                 {tabs.map(t => {
                     const isActive = t.id === active;
                     return (
@@ -61,7 +55,7 @@ export default function Tabs({
                                 'pb-3 -mb-px text-sm font-medium transition',
                                 isActive
                                     ? 'text-amber-700 border-b-2 border-amber-600'
-                                    : 'text-gray-600 hover:text-gray-900'
+                                    : 'text-gray-600 hover:text-gray-900',
                             ].join(' ')}
                         >
                             {t.label}
@@ -70,7 +64,6 @@ export default function Tabs({
                 })}
             </div>
 
-            {/* Panels */}
             <div className="pt-6">
                 {tabs.map(t => (
                     <div

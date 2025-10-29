@@ -4,6 +4,8 @@ import Tabs from '@/components/Tabs';
 import { client } from '@/graphql/client';
 import { GAME_BY_ID } from '@/graphql/queries';
 import { notFound } from 'next/navigation';
+import type { Game } from '@/types/game';
+import SubCard from '@/components/SubCard';
 
 export default async function GameDetails(props: {
     params: Promise<{ gameId: string }>;
@@ -16,7 +18,7 @@ export default async function GameDetails(props: {
         return <div className="max-w-3xl mx-auto p-6">Error: {res.error.message}</div>;
     }
 
-    const g = res.data?.findById;
+    const g = res.data?.findById as Game;
     if (!g) return notFound();
 
     const tabs = [
@@ -44,33 +46,57 @@ export default async function GameDetails(props: {
             label: 'Setup',
             content: (
                 <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
-                    <div className='space-y-4'>
+                    <div className="space-y-6">
                         <Card title="Players setup">
                             <div className="space-y-4">
                                 {(g.setup ?? []).map((s: any, i: number) => (
-                                    <div key={i}>
-                                        <h3 className="font-medium mb-1">{s.playerCount} players</h3>
-                                        <ul className="list-disc list-inside text-sm text-gray-700">
+                                    <SubCard key={i} title={`${s.playerCount} players`}>
+                                        <ul className="space-y-1.5">
                                             {s.components.map((c: any, j: number) => (
-                                                <li key={j}>{c.quantity} × {c.name}</li>
+                                                <li key={j} className="flex items-center justify-between gap-3 text-sm">
+                                                    <span className="text-gray-800 dark:text-gray-200">{c.name}</span>
+                                                    <span
+                                                        className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium
+                                 bg-amber-100 text-amber-700
+                                 dark:bg-amber-400/15 dark:text-amber-300"
+                                                        aria-label={`quantity ${c.quantity}`}
+                                                    >
+                                                        ×{c.quantity}
+                                                    </span>
+                                                </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </SubCard>
                                 ))}
                             </div>
                         </Card>
                     </div>
-                    <div className='space-y-4'>
-                        <Card title='Setup Instructions'>
-                            <ol className="rounded-2xl list-decimal pl-6 text-gray-700">
+
+                    <div className="space-y-6 lg:sticky lg:top-24">
+                        <Card title="Setup Instructions">
+                            <ol className="space-y-3">
                                 {(g.setupInstructions ?? []).map((si: any, i: number) => (
-                                    <li key={i} className="">{si.description} {i}</li>
+                                    <li key={i} className="flex items-start gap-3">
+                                        <span
+                                            className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center
+                           rounded-full text-[11px] font-semibold
+                           bg-amber-100 text-amber-700
+                           dark:bg-amber-500/15 dark:text-amber-300"
+                                            aria-hidden
+                                        >
+                                            {i + 1}
+                                        </span>
+
+                                        <p className="text-sm leading-6 text-gray-800 dark:text-gray-200">
+                                            {si.description}
+                                        </p>
+                                    </li>
                                 ))}
                             </ol>
                         </Card>
                     </div>
-                </div>   
-            ),
+                </div>
+            )
         },
         {
             id: 'turn-structure',
